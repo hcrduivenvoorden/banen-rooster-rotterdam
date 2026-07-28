@@ -5,10 +5,20 @@ Genereert banenzwemmen.ics uit het rooster van Zwemcentrum Rotterdam.
 Filtert op: Banenzwemmen in het 25 meter doelgroepenbad.
 Standaard zonder '55+' en zonder het 50m wedstrijdbad (zie CONFIG).
 
+Het rooster staat gewoon in de HTML van de pagina (server-rendered), in
+een vaste structuur:
+
+    div.block-roster__day
+        h3.block-roster__title                    -> "Maandag 27 juli"
+        li.block-roster__program-item
+            span.block-roster__program-item-time      -> "07:00 - 11:00"
+            a.block-roster__program-item-activity     -> "Banenzwemmen"
+            span.block-roster__program-item-location  -> "25 meter doelgroepenbad"
+
 Gebruik:
     python zwemrooster.py            # schrijft banenzwemmen.ics
-    python zwemrooster.py --debug    # toont ook wat er is gevonden en genegeerd
-    python zwemrooster.py --dump     # schrijft rooster_debug.txt met de ruwe paginatekst
+    python zwemrooster.py --debug    # toont wat er is gevonden en genegeerd
+    python zwemrooster.py --dump     # schrijft rooster_debug.html (ruwe pagina)
 """
 
 import hashlib
@@ -17,6 +27,7 @@ import sys
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
+import requests
 from bs4 import BeautifulSoup
 
 # ---------------- CONFIG ----------------
@@ -37,146 +48,109 @@ MAANDEN = {
 }
 DAGEN = ("maandag", "dinsdag", "woensdag", "donderdag", "vrijdag", "zaterdag", "zondag")
 
-DATE_RE = re.compile(
-    r"^(?:%s)\s+(\d{1,2})\s+(%s)\b" % ("|".join(DAGEN), "|".join(MAANDEN)),
-    re.IGNORECASE,
+DATUM_RE = re.compile(
+    r"(?:%s)\s+(\d{1,2})\s+(%s)" % ("|".join(DAGEN), "|".join(MAANDEN)), re.I
 )
-SLOT_RE = re.compile(r"^(\d{1,2}):(\d{2})\s*(?:[-–]|tot)\s*(\d{1,2}):(\d{2})\s*(.*)$")
-BAD_RE = re.compile(r"(25\s*m|50\s*m|doelgroepenbad|wedstrijdbad|instructiebad)", re.I)
+TIJD_RE = re.compile(r"(\d{1,2}):(\d{2})\s*(?:[-–]|tot)\s*(\d{1,2}):(\d{2})")
 
 
 def fetch_html(url: str) -> str:
-    """Rendert de pagina met een echte browser.
-
-    Het rooster wordt door JavaScript ingeladen: een gewone requests.get()
-    levert een pagina ZONDER roosterregels op. Vandaar Playwright.
-    """
-    from playwright.sync_api import sync_playwright
-
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page(locale="nl-NL")
-        page.goto(url, wait_until="domcontentloaded", timeout=60_000)
-        # wachten tot er daadwerkelijk tijdblokken in de tekst staan
-        try:
-            page.wait_for_function(
-                "() => /\\d{2}:\\d{2}\\s*[-–]\\s*\\d{2}:\\d{2}/.test(document.body.innerText)",
-                timeout=30_000,
-            )
-        except Exception:
-            print("Waarschuwing: geen tijdpatroon gezien binnen 30s; "
-                  "ga toch door met wat er staat.", file=sys.stderr)
-        page.wait_for_timeout(2_000)  # laatste XHR's laten landen
-        html = page.content()
-        browser.close()
-    return html
+    r = requests.get(
+        url,
+        timeout=30,
+        headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) "
+                          "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126 Safari/537.36",
+            "Accept-Language": "nl-NL,nl;q=0.9",
+        },
+    )
+    r.raise_for_status()
+    return r.text
 
 
-def page_lines(html: str) -> list[str]:
-    text = BeautifulSoup(html, "html.parser").get_text("\n")
-    lines = [re.sub(r"\s+", " ", ln).strip() for ln in text.split("\n")]
-    return [ln for ln in lines if ln]
+def tekst(el) -> str:
+    return re.sub(r"\s+", " ", el.get_text(" ", strip=True)) if el else ""
 
 
-def classify_bad(s: str) -> str | None:
-    """'25m', '50m' of None als er geen badnaam in de tekst staat."""
-    if not s:
+def parse_datum(titel: str, today: datetime) -> datetime | None:
+    m = DATUM_RE.search(titel)
+    if not m:
         return None
-    low = s.lower()
-    if re.search(r"50\s*m|wedstrijdbad", low):
-        return "50m"
-    if re.search(r"25\s*m|doelgroepenbad", low):
-        return "25m"
-    return None
+    dag, maand = int(m.group(1)), MAANDEN[m.group(2).lower()]
+    jaar = today.year
+    # het rooster loopt vooruit: een maand ver in het verleden hoort bij volgend jaar
+    if maand < today.month - 6:
+        jaar += 1
+    return datetime(jaar, maand, dag)
 
 
 def parse_roster(html: str, today: datetime, debug: bool = False) -> list[dict]:
-    """Tekst-gebaseerde parser: robuust tegen wijzigingen in de DOM.
+    soup = BeautifulSoup(html, "html.parser")
+    dagen = soup.select(".block-roster__day")
 
-    De badnaam kan op drie plekken staan: achter de activiteit op dezelfde regel,
-    op de regel eronder, of als los kopje erboven. Alle drie worden afgevangen.
-    """
-    lines = page_lines(html)
-    page_has_bad_info = any(BAD_RE.search(ln) for ln in lines)
+    if not dagen:
+        print("Geen enkel .block-roster__day-element gevonden - de opzet van de "
+              "pagina is gewijzigd. Draai met --dump en bekijk rooster_debug.html.",
+              file=sys.stderr)
+        return []
 
-    events, skipped = [], []
-    current_date, current_bad = None, None
+    events, genegeerd = [], []
 
-    for i, line in enumerate(lines):
-        m = DATE_RE.match(line)
-        if m:
-            day, month = int(m.group(1)), MAANDEN[m.group(2).lower()]
-            year = today.year
-            # jaarwissel: rooster loopt vooruit, dus een maand ver in het verleden = volgend jaar
-            if month < today.month - 6:
-                year += 1
-            current_date = datetime(year, month, day)
+    for dagblok in dagen:
+        datum = parse_datum(tekst(dagblok.select_one(".block-roster__title")), today)
+        if datum is None:
             continue
 
-        # losse regel die alleen een badnaam is -> geldt als kopje voor wat volgt
-        if not SLOT_RE.match(line) and BAD_RE.search(line) and len(line) < 60:
-            current_bad = classify_bad(line) or current_bad
-            continue
+        for item in dagblok.select(".block-roster__program-item"):
+            tijd = tekst(item.select_one('[class*="program-item-time"]'))
+            activiteit = tekst(item.select_one('[class*="program-item-activity"]'))
+            bad = tekst(item.select_one('[class*="program-item-location"]'))
 
-        m = SLOT_RE.match(line)
-        if not m or current_date is None:
-            continue
+            m = TIJD_RE.search(tijd)
+            if not m or not activiteit:
+                continue
 
-        h1, m1, h2, m2, label = m.groups()
-        label = label.strip()
-        if not label:
-            continue
+            reden = None
+            if not activiteit.lower().startswith("banenzwemmen"):
+                reden = "geen banenzwemmen"
+            elif not INCLUDE_55PLUS and "55+" in activiteit:
+                reden = "55+"
+            elif not INCLUDE_50M and not re.search(r"25\s*meter", bad, re.I):
+                reden = f"ander bad ({bad or 'onbekend'})"
 
-        if not label.lower().startswith("banenzwemmen"):
-            skipped.append((current_date.date(), f"{h1}:{m1}", label, "geen banenzwemmen"))
-            continue
+            if reden:
+                genegeerd.append((datum.date(), tijd, activiteit, reden))
+                continue
 
-        # badnaam: 1) op de regel zelf, 2) op de regel eronder, 3) uit het laatste kopje.
-        # De regel eronder telt alleen als hij niet het kopje van een NIEUWE sectie is
-        # (herkenbaar doordat er direct een datumregel op volgt).
-        volgende = lines[i + 1] if i + 1 < len(lines) else ""
-        daarna = lines[i + 2] if i + 2 < len(lines) else ""
-        bad_onder = classify_bad(volgende) if not DATE_RE.match(daarna) else None
-        bad = classify_bad(label) or bad_onder or current_bad
+            h1, m1, h2, m2 = (int(g) for g in m.groups())
+            start = datum.replace(hour=h1, minute=m1, tzinfo=TZ)
+            eind = datum.replace(hour=h2, minute=m2, tzinfo=TZ)
+            if eind <= start:
+                eind += timedelta(days=1)
 
-        if not INCLUDE_55PLUS and "55+" in label:
-            skipped.append((current_date.date(), f"{h1}:{m1}", label, "55+"))
-            continue
-        if not INCLUDE_50M and bad == "50m":
-            skipped.append((current_date.date(), f"{h1}:{m1}", label, "50m bad"))
-            continue
-        if not INCLUDE_50M and bad is None and page_has_bad_info:
-            # pagina noemt baden wel, maar niet bij dit blok -> niet gokken
-            skipped.append((current_date.date(), f"{h1}:{m1}", label, "bad onbekend"))
-            continue
+            events.append({"start": start, "end": eind,
+                           "label": f"{activiteit} - {bad}" if bad else activiteit})
 
-        start = current_date.replace(hour=int(h1), minute=int(m1), tzinfo=TZ)
-        end = current_date.replace(hour=int(h2), minute=int(m2), tzinfo=TZ)
-        if end <= start:
-            end += timedelta(days=1)
-
-        events.append({"start": start, "end": end, "label": label, "bad": bad or "onbekend"})
-
-    # dedupe (rooster toont soms overlap tussen 'deze week' en 'volgende week')
-    seen, unique = set(), []
+    # dedupe (voor het geval een blok twee keer op de pagina staat)
+    gezien, uniek = set(), []
     for e in events:
-        key = (e["start"], e["end"])
-        if key not in seen:
-            seen.add(key)
-            unique.append(e)
-    unique.sort(key=lambda e: e["start"])
+        sleutel = (e["start"], e["end"])
+        if sleutel not in gezien:
+            gezien.add(sleutel)
+            uniek.append(e)
+    uniek.sort(key=lambda e: e["start"])
 
     if debug:
-        print(f"\nPagina noemt badnamen: {page_has_bad_info}", file=sys.stderr)
-        print(f"\nGEVONDEN ({len(unique)}):", file=sys.stderr)
-        for e in unique:
-            print(f"  {e['start']:%a %d-%m %H:%M}-{e['end']:%H:%M}  {e['label']}  [{e['bad']}]",
+        print(f"\n{len(dagen)} dagen op de pagina", file=sys.stderr)
+        print(f"\nGEVONDEN ({len(uniek)}):", file=sys.stderr)
+        for e in uniek:
+            print(f"  {e['start']:%a %d-%m %H:%M}-{e['end']:%H:%M}  {e['label']}",
                   file=sys.stderr)
-        print(f"\nGENEGEERD ({len(skipped)}):", file=sys.stderr)
-        for d, t, lab, reden in skipped:
-            print(f"  {d} {t}  {lab}  -> {reden}", file=sys.stderr)
+        print(f"\nGENEGEERD ({len(genegeerd)}):", file=sys.stderr)
+        for d, t, act, reden in genegeerd:
+            print(f"  {d} {t}  {act}  -> {reden}", file=sys.stderr)
 
-    return unique
+    return uniek
 
 
 def esc(s: str) -> str:
@@ -224,9 +198,9 @@ def main() -> int:
     html = fetch_html(URL)
 
     if "--dump" in sys.argv:
-        with open("rooster_debug.txt", "w", encoding="utf-8") as f:
-            f.write("\n".join(page_lines(html)))
-        print("Ruwe paginatekst weggeschreven naar rooster_debug.txt")
+        with open("rooster_debug.html", "w", encoding="utf-8") as f:
+            f.write(html)
+        print("Ruwe pagina weggeschreven naar rooster_debug.html")
 
     events = parse_roster(html, datetime.now(TZ), debug=debug)
 
