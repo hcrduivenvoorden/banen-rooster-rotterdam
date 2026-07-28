@@ -19,9 +19,25 @@ jobs:
         with:
           python-version: "3.12"
 
-      - run: pip install requests beautifulsoup4
+      # Het rooster wordt door JavaScript ingeladen, dus de pagina moet
+      # in een echte browser gerenderd worden. Vandaar Playwright.
+      - run: pip install playwright beautifulsoup4
+
+      - run: python -m playwright install --with-deps chromium
 
       - run: python zwemrooster.py --debug
+
+      - name: Debug-dump maken als het misgaat
+        if: failure()
+        run: python zwemrooster.py --debug --dump || true
+
+      - name: Debug-dump uploaden als het misgaat
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rooster-debug
+          path: rooster_debug.txt
+          if-no-files-found: ignore
 
       - name: Commit als er iets gewijzigd is
         run: |
