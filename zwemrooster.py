@@ -17,7 +17,6 @@ import sys
 from datetime import datetime, timedelta
 from zoneinfo import ZoneInfo
 
-import requests
 from bs4 import BeautifulSoup
 
 # ---------------- CONFIG ----------------
@@ -47,9 +46,30 @@ BAD_RE = re.compile(r"(25\s*m|50\s*m|doelgroepenbad|wedstrijdbad|instructiebad)"
 
 
 def fetch_html(url: str) -> str:
-    r = requests.get(url, timeout=30, headers={"User-Agent": "Mozilla/5.0 (rooster-ics)"})
-    r.raise_for_status()
-    return r.text
+    """Rendert de pagina met een echte browser.
+
+    Het rooster wordt door JavaScript ingeladen: een gewone requests.get()
+    levert een pagina ZONDER roosterregels op. Vandaar Playwright.
+    """
+    from playwright.sync_api import sync_playwright
+
+    with sync_playwright() as p:
+        browser = p.chromium.launch()
+        page = browser.new_page(locale="nl-NL")
+        page.goto(url, wait_until="domcontentloaded", timeout=60_000)
+        # wachten tot er daadwerkelijk tijdblokken in de tekst staan
+        try:
+            page.wait_for_function(
+                "() => /\\d{2}:\\d{2}\\s*[-–]\\s*\\d{2}:\\d{2}/.test(document.body.innerText)",
+                timeout=30_000,
+            )
+        except Exception:
+            print("Waarschuwing: geen tijdpatroon gezien binnen 30s; "
+                  "ga toch door met wat er staat.", file=sys.stderr)
+        page.wait_for_timeout(2_000)  # laatste XHR's laten landen
+        html = page.content()
+        browser.close()
+    return html
 
 
 def page_lines(html: str) -> list[str]:
