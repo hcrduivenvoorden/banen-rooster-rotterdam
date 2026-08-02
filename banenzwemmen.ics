@@ -3,88 +3,88 @@ VERSION:2.0
 PRODID:-//zwemrooster//NL
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:Banenzwemmen - Sportcentrum Feijenoord
+X-WR-CALNAME:Banenzwemmen - Feijenoord
 X-WR-TIMEZONE:Europe/Amsterdam
 X-PUBLISHED-TTL:PT12H
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 BEGIN:VEVENT
-UID:5fb62a5ee2f550c1085343b1825f9f19e5ce10d4@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:f5182062edc0634306948cb63e06b4096c50fb85@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260727T053000Z
 DTEND:20260727T063000Z
-SUMMARY:Banenzwemmen Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:9bbf559a8dba7e9542ed09f1966640e0090480b8@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:c7376114a8e1f242b665fe9300f8a27cdb807f10@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260730T160000Z
 DTEND:20260730T180000Z
-SUMMARY:Banenzwemmen Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:34f6e421777588db5f977300a5e70ad17a915259@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:d040079f0a2e6dd5e8e03c7c705a7881d25196dd@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260731T190000Z
 DTEND:20260731T200000Z
-SUMMARY:Banenzwemmen Heren Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Heren Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:f766912b7caddbb3de90a1d9a20c2e96cd7810a1@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:9043197c4c778f64dbde9cef7ffdab9a599454d6@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260801T081500Z
 DTEND:20260801T121500Z
-SUMMARY:Banenzwemmen Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:e9ac7192b1e004760cf6081ddef5964525e7b553@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:3ee23e0be7ad95b5386eccb5bfe50d52941e3336@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260803T053000Z
 DTEND:20260803T063000Z
-SUMMARY:Banenzwemmen Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:02fd8688171600fd04d1ccec88b8856e6b75c9be@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:aca81e180c907dee6ee89e67e44a3d4fd0d3ca38@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260806T160000Z
 DTEND:20260806T180000Z
-SUMMARY:Banenzwemmen Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:6b128346cd32ecc3e4f53ae891d7a8c81d9422c4@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:68bd8f25a154a045b52fa294466b387a221730e8@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260807T190000Z
 DTEND:20260807T200000Z
-SUMMARY:Banenzwemmen Heren Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Heren Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:d988ed5582c2cc86d92ac18c4e2431a15d0d4469@sportcentrum-feijenoord
-DTSTAMP:20260802T192020Z
+UID:9d87aa1d63c45d76f7a5d86964fea75e099a0506@zwemrooster-rotterdam
+DTSTAMP:20260802T202216Z
 DTSTART:20260808T081500Z
 DTEND:20260808T121500Z
-SUMMARY:Banenzwemmen Wedstrijdbad
+SUMMARY:Feijenoord - banenzwemmen
 LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
-DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
+DESCRIPTION:Banenzwemmen Wedstrijdbad
 TRANSP:TRANSPARENT
 END:VEVENT
 END:VCALENDAR
