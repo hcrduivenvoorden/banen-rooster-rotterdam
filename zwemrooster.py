@@ -17,9 +17,6 @@ URL = "https://www.sportbedrijfrotterdam.nl/locatie/sportcentrum-feijenoord"
 OUTFILE = "banenzwemmen.ics"
 CALENDAR_NAME = "Banenzwemmen - Sportcentrum Feijenoord"
 LOCATION = "Sportcentrum Feijenoord, Laan op Zuid 1055, 3072 DB Rotterdam"
-
-# Feijenoord noemt het bad niet in de roosterregel; het wedstrijdbad is 25m.
-# Blokken waarvan het label een van deze woorden bevat, slaan we over:
 UITSLUITEN = ["dames", "55+"]
 TZ = ZoneInfo("Europe/Amsterdam")
 # ----------------------------------------
@@ -35,8 +32,8 @@ DATE_RE = re.compile(
     r"^(?:%s)\s+(\d{1,2})\s+(%s)$" % ("|".join(DAGEN), "|".join(MAANDEN)),
     re.IGNORECASE,
 )
-SLOT_RE = re.compile(r"^(\d{2}):(\d{2})\s*[-–]\s*(\d{2}):(\d{2})\s+(.*)$")
-# vangt zowel "Banenzwemmen" als "Banen zwemmen Dames"
+# tijdvak, met optioneel het label erachter op dezelfde regel
+SLOT_RE = re.compile(r"^(\d{1,2}):(\d{2})\s*[-–—]\s*(\d{1,2}):(\d{2})\s*(.*)$")
 BANEN_RE = re.compile(r"^banen\s?zwemmen\b", re.IGNORECASE)
 
 
@@ -46,14 +43,24 @@ def fetch_html(url: str) -> str:
     return r.text
 
 
-def parse_roster(html: str, today: datetime) -> list[dict]:
-    """Tekst-gebaseerde parser: robuust tegen wijzigingen in de DOM."""
+def to_lines(html: str) -> list[str]:
     text = BeautifulSoup(html, "html.parser").get_text("\n")
     lines = [re.sub(r"\s+", " ", ln).strip() for ln in text.split("\n")]
-    lines = [ln for ln in lines if ln]
+    return [ln for ln in lines if ln]
 
+
+def parse_roster(html: str, today: datetime) -> list[dict]:
+    """
+    Loopt regel voor regel. Een tijdvak start een blok; het label kan op
+    dezelfde regel staan of over de volgende regels verdeeld zijn (de site
+    zet de activiteitsnaam in een aparte link).
+    """
+    lines = to_lines(html)
     events, current_date = [], None
-    for line in lines:
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+
         m = DATE_RE.match(line)
         if m:
             day, month = int(m.group(1)), MAANDEN[m.group(2).lower()]
@@ -61,13 +68,30 @@ def parse_roster(html: str, today: datetime) -> list[dict]:
             if month < today.month - 6:   # jaarwissel: rooster loopt vooruit
                 year += 1
             current_date = datetime(year, month, day)
+            i += 1
             continue
 
         m = SLOT_RE.match(line)
         if not m or current_date is None:
+            i += 1
             continue
 
-        h1, m1, h2, m2, label = m.groups()
+        h1, m1, h2, m2, rest = m.groups()
+        delen = [rest.strip()] if rest.strip() else []
+
+        # label aanvullen met volgende regels tot het volgende tijdvak of de
+        # volgende dag; maximaal 3 stukjes zodat losse tekst niet meelift
+        j = i + 1
+        while j < len(lines) and len(delen) < 3:
+            nxt = lines[j]
+            if DATE_RE.match(nxt) or SLOT_RE.match(nxt) or len(nxt) > 60:
+                break
+            delen.append(nxt)
+            j += 1
+
+        label = " ".join(delen).strip()
+        i = j
+
         if not BANEN_RE.match(label):
             continue
         if any(w in label.lower() for w in UITSLUITEN):
@@ -77,7 +101,6 @@ def parse_roster(html: str, today: datetime) -> list[dict]:
         end = current_date.replace(hour=int(h2), minute=int(m2), tzinfo=TZ)
         if end <= start:
             end += timedelta(days=1)
-
         events.append({"start": start, "end": end, "label": label})
 
     seen, unique = set(), []
@@ -129,15 +152,33 @@ def build_ics(events: list[dict]) -> str:
     return "\r\n".join(out) + "\r\n"
 
 
+def dump_debug(html: str) -> None:
+    """Print bij 0 treffers de roostersectie, zodat de log bruikbaar is."""
+    lines = to_lines(html)
+    idx = next((n for n, ln in enumerate(lines) if ln.lower() == "deze week"), None)
+    print("--- debug: regels rond de roostersectie ---", file=sys.stderr)
+    if idx is None:
+        print("Kop 'Deze week' niet gevonden in de pagina.", file=sys.stderr)
+        for ln in lines[:40]:
+            print(repr(ln), file=sys.stderr)
+    else:
+        for ln in lines[idx:idx + 60]:
+            print(repr(ln), file=sys.stderr)
+
+
 def main() -> int:
     html = fetch_html(URL)
     events = parse_roster(html, datetime.now(TZ))
     if not events:
-        print("Geen banenzwemmen-blokken gevonden - opzet website gewijzigd?", file=sys.stderr)
+        print("Geen banenzwemmen-blokken gevonden.", file=sys.stderr)
+        dump_debug(html)
         return 1
     with open(OUTFILE, "w", encoding="utf-8") as f:
         f.write(build_ics(events))
     print(f"{len(events)} blokken weggeschreven naar {OUTFILE}")
+    for e in events:
+        print("  ", e["start"].strftime("%a %d-%m %H:%M"), "-",
+              e["end"].strftime("%H:%M"), e["label"])
     return 0
 
 
