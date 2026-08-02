@@ -3,11 +3,14 @@ name: Zwemrooster naar ICS
 on:
   schedule:
     - cron: "0 4 * * 1"   # elke maandag 04:00 UTC (06:00 NL zomertijd)
-    - cron: "0 4 * * 0"   # en elke zondag, voor de zekerheid
   workflow_dispatch:       # handmatig te starten
 
 permissions:
   contents: write
+
+concurrency:
+  group: rooster
+  cancel-in-progress: false
 
 jobs:
   update:
@@ -21,24 +24,14 @@ jobs:
 
       - run: pip install requests beautifulsoup4
 
-      - run: python zwemrooster.py --debug
-
-      - name: Ruwe pagina bewaren als het misgaat
-        if: failure()
-        run: python zwemrooster.py --dump || true
-
-      - name: Ruwe pagina uploaden als het misgaat
-        if: failure()
-        uses: actions/upload-artifact@v4
-        with:
-          name: rooster-debug
-          path: rooster_debug.html
-          if-no-files-found: ignore
+      - run: python zwemrooster.py
 
       - name: Commit als er iets gewijzigd is
         run: |
           git config user.name "github-actions"
           git config user.email "actions@github.com"
           git add banenzwemmen.ics
-          git diff --staged --quiet || git commit -m "Rooster bijgewerkt $(date -u +%F)"
+          git diff --staged --quiet && echo "Niets gewijzigd" && exit 0
+          git commit -m "Rooster bijgewerkt $(date -u +%F)"
+          git pull --rebase origin main
           git push
