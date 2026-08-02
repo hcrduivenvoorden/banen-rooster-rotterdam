@@ -3,188 +3,88 @@ VERSION:2.0
 PRODID:-//zwemrooster//NL
 CALSCALE:GREGORIAN
 METHOD:PUBLISH
-X-WR-CALNAME:Banenzwemmen 25m - Zwemcentrum Rotterdam
+X-WR-CALNAME:Banenzwemmen - Sportcentrum Feijenoord
 X-WR-TIMEZONE:Europe/Amsterdam
 X-PUBLISHED-TTL:PT12H
 REFRESH-INTERVAL;VALUE=DURATION:PT12H
 BEGIN:VEVENT
-UID:9ec760aed1e3fe26f55db4f7c071ab9f04685800@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260727T050000Z
-DTEND:20260727T090000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:5fb62a5ee2f550c1085343b1825f9f19e5ce10d4@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260727T053000Z
+DTEND:20260727T063000Z
+SUMMARY:Banenzwemmen Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:9e55395d7f92d0a6b001a865e9970354d6f7f3d2@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260727T111500Z
-DTEND:20260727T121500Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:9bbf559a8dba7e9542ed09f1966640e0090480b8@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260730T160000Z
+DTEND:20260730T180000Z
+SUMMARY:Banenzwemmen Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:840700501b1eb1647c5abaeac601e87dcee30ba0@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260727T193000Z
-DTEND:20260727T203000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:34f6e421777588db5f977300a5e70ad17a915259@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260731T190000Z
+DTEND:20260731T200000Z
+SUMMARY:Banenzwemmen Heren Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:b284083f0c526c70b17f15a78a28d147c811c8e4@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260729T141500Z
-DTEND:20260729T160000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:f766912b7caddbb3de90a1d9a20c2e96cd7810a1@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260801T081500Z
+DTEND:20260801T121500Z
+SUMMARY:Banenzwemmen Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:8214a4ac90301766635e117d85323b44158c7f0c@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260729T184500Z
-DTEND:20260729T203000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:e9ac7192b1e004760cf6081ddef5964525e7b553@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260803T053000Z
+DTEND:20260803T063000Z
+SUMMARY:Banenzwemmen Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:daa3eb74b3ffb91b31069a8f433f7d9bb27f0b40@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260730T114500Z
-DTEND:20260730T133000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:02fd8688171600fd04d1ccec88b8856e6b75c9be@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260806T160000Z
+DTEND:20260806T180000Z
+SUMMARY:Banenzwemmen Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:b59378bc94ed9e2b2c37429469e3c68bbd4bf1bc@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260730T163000Z
-DTEND:20260730T193000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:6b128346cd32ecc3e4f53ae891d7a8c81d9422c4@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260807T190000Z
+DTEND:20260807T200000Z
+SUMMARY:Banenzwemmen Heren Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 BEGIN:VEVENT
-UID:70134f800a5eb54a7b215b16373fb022f084d4dc@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260801T080000Z
-DTEND:20260801T120000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:98297dca5ad70e8cf725dad5c019d648ec4db62b@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260802T080000Z
-DTEND:20260802T120000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:b7785b39d4e56bbc8e09ec9b7b537b10e8225b71@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260803T050000Z
-DTEND:20260803T090000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:65c0e20cab7da8c320ba5da41e6653851aa1fe9f@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260803T111500Z
-DTEND:20260803T121500Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:386015fcb4959f4e99b5b8a01fc1d6ead29f2f18@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260803T193000Z
-DTEND:20260803T203000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:74c0167d4528f57359fcccb71620d1d7a3cb6cc0@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260805T141500Z
-DTEND:20260805T160000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:fcc6d7b98981ac3d7767d3cf08f812d29e8202ac@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260805T184500Z
-DTEND:20260805T203000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:d100ec6011a3edd9fe7847c9ac7bd51b5c6a13b1@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260806T114500Z
-DTEND:20260806T133000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:04a3fe520a1303081bff399aaa9bb58236bce5f5@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260806T163000Z
-DTEND:20260806T193000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:d24a7b1224bc124cb0b15936198ce04623f67949@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260808T080000Z
-DTEND:20260808T120000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
-TRANSP:TRANSPARENT
-END:VEVENT
-BEGIN:VEVENT
-UID:d1fae87b5031e789a31357bf01abc2c87712dbe5@zwemcentrum-rotterdam
-DTSTAMP:20260802T062422Z
-DTSTART:20260809T080000Z
-DTEND:20260809T120000Z
-SUMMARY:Banenzwemmen 25m
-LOCATION:Zwemcentrum Rotterdam\, Annie M.G. Schmidtplein 8\, 3083 NZ Rotterdam
-DESCRIPTION:Banenzwemmen - 25 meter doelgroepenbad
+UID:d988ed5582c2cc86d92ac18c4e2431a15d0d4469@sportcentrum-feijenoord
+DTSTAMP:20260802T192020Z
+DTSTART:20260808T081500Z
+DTEND:20260808T121500Z
+SUMMARY:Banenzwemmen Wedstrijdbad
+LOCATION:Sportcentrum Feijenoord\, Laan op Zuid 1055\, 3072 DB Rotterdam
+DESCRIPTION:Sportcentrum Feijenoord - wedstrijdbad (25m)
 TRANSP:TRANSPARENT
 END:VEVENT
 END:VCALENDAR
